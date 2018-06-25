@@ -54,11 +54,15 @@ RUN apk --update --virtual build-deps add \
     printf "\n" | pecl install -o -f \
         imagick \
         redis \
-        xdebug-2.5.5 && \
+        xdebug-2.5.5 \
+        mongo \
+        igbinary && \
         rm -rf /tmp/pear && \
     docker-php-ext-enable \
         imagick \
         redis \
+        mongo \
+        igbinary \
         xdebug && \
     apk del \
         build-deps
