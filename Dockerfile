@@ -15,17 +15,6 @@ RUN set -xe \
     libjpeg-turbo-dev \
     libpng-dev \
     libxml2-dev  \
-    icu \
-    imagemagick \
-    pcre \
-    freetype \
-    libintl \
-    libjpeg-turbo \
-    libpng \
-    libltdl \
-    libxml2 \
-    mysql-client \
-    postgresql-client \
     openldap-dev \
   && docker-php-ext-configure gd \
     --with-gd \
@@ -58,7 +47,6 @@ RUN set -xe \
     xdebug-2.5.5 \
     mongo \
     igbinary \
-  &&  rm -rf /tmp/pear \
   && docker-php-ext-enable \
     imagick \
     redis \
@@ -72,7 +60,8 @@ RUN set -xe \
       | sort -u \
       | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
   )" \
-  && apk add --no-cache --virtual .php-rundeps $runDeps \
+  && apk add --no-cache --virtual .php-rundeps $runDeps  \
+  &&  rm -rf /tmp/pear /var/cache/apk/* \
   && apk del .build-deps
 
 WORKDIR /var/www
