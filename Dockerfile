@@ -2,70 +2,78 @@ FROM php:5.6-fpm-alpine
 
 LABEL maintainer Alipeng <lipeng.yang@mobvista.com>
 
-RUN apk --update --virtual build-deps add \
-        autoconf \
-        make \
-        gcc \
-        g++ \
-        libtool \
-        icu-dev \
-        curl-dev \
-        freetype-dev \
-        imagemagick-dev \
-        pcre-dev \
-        postgresql-dev \
-        libjpeg-turbo-dev \
-        libpng-dev \
-        libxml2-dev && \
-    apk add \
-        icu \
-        imagemagick \
-        pcre \
-        freetype \
-        libintl \
-        libjpeg-turbo \
-        libpng \
-        libltdl \
-        libxml2 \
-        mysql-client \
-        postgresql-client && \
-    docker-php-ext-configure gd \
-        --with-gd \
-        --with-freetype-dir=/usr/include/ \
-        --with-png-dir=/usr/include/ \
-        --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-configure bcmath && \
-    docker-php-ext-install \
-        soap \
-        zip \
-        curl \
-        bcmath \
-        exif \
-        gd \
-        iconv \
-        intl \
-        mbstring \
-        opcache \
-        pdo_mysql \
-        mysql \
-        pgsql \
-        pdo_pgsql && \
-    pecl channel-update pecl.php.net && \
-    printf "\n" | pecl install -o -f \
-        imagick \
-        redis \
-        xdebug-2.5.5 \
-        mongo \
-        igbinary && \
-        rm -rf /tmp/pear && \
-    docker-php-ext-enable \
-        imagick \
-        redis \
-        mongo \
-        igbinary \
-        xdebug && \
-    apk del \
-        build-deps
+RUN set -xe \
+  && apk add --no-cache --virtual .build-deps \
+    $PHPIZE_DEPS \
+    libtool \
+    icu-dev \
+    curl-dev \
+    freetype-dev \
+    imagemagick-dev \
+    pcre-dev \
+    postgresql-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libxml2-dev  \
+    icu \
+    imagemagick \
+    pcre \
+    freetype \
+    libintl \
+    libjpeg-turbo \
+    libpng \
+    libltdl \
+    libxml2 \
+    mysql-client \
+    postgresql-client \
+    openldap-dev \
+  && docker-php-ext-configure gd \
+    --with-gd \
+    --with-freetype-dir=/usr/include/  \
+    --with-png-dir=/usr/include/  \
+    --with-jpeg-dir=/usr/include/  \
+  && docker-php-ext-configure bcmath \
+  && docker-php-ext-configure ldap \
+    --with-ldap \
+  && docker-php-ext-install \
+    soap \
+    zip \
+    curl \
+    bcmath \
+    exif \
+    gd \
+    iconv \
+    intl \
+    mbstring \
+    opcache \
+    pdo_mysql \
+    mysql \
+    pgsql \
+    pdo_pgsql \
+    ldap \
+  && pecl channel-update pecl.php.net \
+  && printf "\n" | pecl install -o -f \
+    imagick \
+    redis \
+    xdebug-2.5.5 \
+    mongo \
+    igbinary \
+  &&  rm -rf /tmp/pear \
+  && docker-php-ext-enable \
+    imagick \
+    redis \
+    mongo \
+    igbinary \
+    xdebug \
+  && docker-php-source delete \
+  && runDeps="$( \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+      | tr ',' '\n' \
+      | sort -u \
+      | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+  )" \
+  && apk add --no-cache --virtual .php-rundeps $runDeps \
+  && apk del .build-deps
 
 WORKDIR /var/www
 
