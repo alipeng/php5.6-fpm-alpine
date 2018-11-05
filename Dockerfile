@@ -60,7 +60,7 @@ RUN set -xe \
       | sort -u \
       | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
   )" \
-  && apk add --no-cache --virtual .php-rundeps $runDeps  \
+  && apk add --no-cache --virtual .php-rundeps $runDeps imagemagick \
   &&  rm -rf /tmp/pear /var/cache/apk/* \
   && apk del .build-deps
 
