@@ -21,6 +21,7 @@ RUN set -xe \
     --with-freetype-dir=/usr/include/  \
     --with-png-dir=/usr/include/  \
     --with-jpeg-dir=/usr/include/  \
+    –with-mysqli \
   && docker-php-ext-configure bcmath \
   && docker-php-ext-configure ldap \
     --with-ldap \
@@ -37,6 +38,7 @@ RUN set -xe \
     opcache \
     pdo_mysql \
     mysql \
+    mysqli \
     pgsql \
     pdo_pgsql \
     ldap \
@@ -53,6 +55,7 @@ RUN set -xe \
     mongo \
     igbinary \
     xdebug \
+    mysqli \
   && docker-php-source delete \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
