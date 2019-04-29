@@ -48,7 +48,7 @@ RUN set -xe \
     redis \
     xdebug-2.5.5 \
     mongo \
-    igbinary \
+    igbinary2.0.8 \
   && docker-php-ext-enable \
     imagick \
     redis \
