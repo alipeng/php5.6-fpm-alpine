@@ -21,7 +21,7 @@ RUN set -xe \
     --with-freetype-dir=/usr/include/  \
     --with-png-dir=/usr/include/  \
     --with-jpeg-dir=/usr/include/  \
-    –with-mysqli \
+    --with-mysqli \
   && docker-php-ext-configure bcmath \
   && docker-php-ext-configure ldap \
     --with-ldap \
