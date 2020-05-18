@@ -16,7 +16,7 @@ RUN set -xe \
     libpng-dev \
     libxml2-dev  \
     openldap-dev \
-    libmcrypt \
+    libmcrypt-dev \
   && docker-php-ext-configure gd \
     --with-gd \
     --with-freetype-dir=/usr/include/  \
