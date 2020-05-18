@@ -47,7 +47,7 @@ RUN set -xe \
   && pecl channel-update pecl.php.net \
   && printf "\n" | pecl install -o -f \
     imagick \
-    redis \
+    redis-4.3.0 \
     xdebug-2.5.5 \
     mongo \
     igbinary-2.0.8 \
