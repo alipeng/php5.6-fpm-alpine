@@ -42,6 +42,7 @@ RUN set -xe \
     pgsql \
     pdo_pgsql \
     ldap \
+    mcrypt \
   && pecl channel-update pecl.php.net \
   && printf "\n" | pecl install -o -f \
     imagick \
@@ -56,6 +57,7 @@ RUN set -xe \
     igbinary \
     xdebug \
     mysqli \
+    mcrypt \
   && docker-php-source delete \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
